@@ -1,0 +1,5 @@
+cloud-devops-notes/
+├── README.md             ← Home / index with links to all days
+├── Day1_Route53.md       ← Your first learning note
+├── screenshots/          ← Folder for images or CLI logs
+└── Day2_CloudWatch.md    ← Future notes
