@@ -36,7 +36,7 @@
 
 ---
 
-## ❓ Questions I Had (Now Answered)
+## Questions I Had (Now Answered)
 
 - **What is the difference between A and Alias Records?**  
   A → IP address.  
