@@ -1,4 +1,4 @@
-# Day 1 – Route 53 Basics
+– Route 53 Basics
 
 ## 🌐 Concepts I Learned
 
@@ -47,11 +47,6 @@
 
 ---
 
-## 🔁 Plan for Day 2
-
-- Create a public hosted zone in Route 53
-- Add an A record for an EC2 instance or dummy IP
-- Try Weighted Routing (if possible)
 - Start documenting hands-on results
 
 
