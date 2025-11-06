@@ -1,0 +1,196 @@
+# Day 1 – Linux Basics
+
+---
+
+## What is Linux
+
+Linux is an open-source operating system that forms the backbone of most servers, cloud platforms, and DevOps tools. It is based on UNIX and follows the principle that "everything is a file" — even hardware devices and system processes.
+
+Linux provides stability, performance, and flexibility, making it the preferred choice for running applications, automating tasks, and managing servers.
+
+---
+
+## Why Linux is Essential for DevOps
+
+In DevOps, Linux is the foundation of almost every tool and cloud platform.  
+AWS EC2 instances, Docker containers, Jenkins servers, and Kubernetes clusters all run efficiently on Linux.
+
+Key reasons why Linux is used in DevOps:
+
+1. Open Source and Free – No licensing restrictions, easy to customize.
+2. Command Line Efficiency – Enables automation and scripting.
+3. High Stability – Rarely crashes, ideal for production servers.
+4. Security – Fine-grained user and permission management.
+5. Cloud Native – Most cloud platforms are built on Linux-based systems.
+
+In summary, mastering Linux builds the foundation for every DevOps skill such as Docker, Jenkins, Terraform, and Kubernetes.
+
+---
+
+## Linux File System Structure
+
+Linux follows a hierarchical tree structure, where all directories start from the root directory `/`.
+
+| Directory | Description |
+|------------|--------------|
+| `/` | The root directory, base of the entire file system. |
+| `/home` | User home directories (e.g., `/home/ubuntu`). |
+| `/etc` | System and application configuration files. |
+| `/var` | Variable data such as logs, mail, and spool files. |
+| `/bin`, `/sbin` | Essential binary executables for system commands. |
+| `/usr` | User-installed applications and libraries. |
+| `/tmp` | Temporary files, automatically cleared after reboot. |
+| `/opt` | Optional or third-party software packages. |
+| `/root` | Home directory of the root (administrator) user. |
+
+When troubleshooting systems:
+- Configuration issues are often in `/etc`.
+- Logs and runtime information are often in `/var/log`.
+
+---
+
+## Navigation Commands
+
+These commands help you move around and explore the Linux file system.
+
+| Command | Description | Example |
+|----------|-------------|----------|
+| `pwd` | Displays the current working directory. | `pwd` |
+| `ls` | Lists files and directories in the current directory. | `ls -l`, `ls -a`, `ls -lh` |
+| `cd <path>` | Changes the directory to the specified path. | `cd /etc`, `cd ..`, `cd ~` |
+| `cd -` | Returns to the previous directory. | `cd -` |
+| `tree` | Displays files and directories in a tree-like structure. | `tree /home` |
+
+Example:
+```bash
+pwd
+cd /home
+ls -la
+cd ..
+tree
+
+################ SHOW CURRENT DIRECTORY -------------------->>>> pwd
+
+################ LIST FILES & DIRECTORIES ------------------->>>> ls
+################ Common Options:
+# ls -l   → Long listing format (shows permissions, owners, etc.)
+# ls -a   → Shows hidden files (those starting with '.')
+# ls -lh  → Human readable file sizes
+
+################ CHANGE DIRECTORY --------------------------->>>> cd <path>
+# cd ..   → Go up one directory
+# cd ~    → Go to home directory
+# cd -    → Go to previous directory
+
+################ DISPLAY DIRECTORY STRUCTURE (TREE VIEW) ----->>>> tree
+# tree /home   → Shows directory structure of /home
+# sudo apt install tree   → Install if not available
+
+################ CREATE A DIRECTORY ------------------------->>>> mkdir <directory_name>
+# Example:
+mkdir devops
+
+################ CREATE NESTED DIRECTORIES ------------------->>>> mkdir -p devops/{projects,scripts,notes}
+
+################ CREATE FILES ------------------------------->>>> touch <filename>
+# Example:
+touch file.txt
+
+################ WRITE CONTENT TO FILE ----------------------->>>> echo "Hello DevOps" > file.txt
+# Append text instead of overwrite:
+echo "New line added" >> file.txt
+
+################ DISPLAY FILE CONTENT ----------------------->>>> cat <filename>
+# View file content:
+cat file.txt
+# Show first 10 lines:
+head <filename>
+# Show last 10 lines:
+tail <filename>
+# Follow live changes (useful for logs):
+tail -f <filename>
+
+################ COPY FILE OR DIRECTORY --------------------->>>> cp <source> <destination>
+# Example:
+cp file.txt backup.txt
+# Copy entire directory recursively:
+cp -r devops backup_devops
+
+################ MOVE OR RENAME FILES ----------------------->>>> mv <source> <destination>
+# Example:
+mv file.txt /home/ubuntu/notes/
+# Rename file:
+mv oldname.txt newname.txt
+
+################ REMOVE A FILE ------------------------------>>>> rm <filename>
+# Ask before removing:
+rm -i <filename>
+# Force remove (no confirmation):
+rm -f <filename>
+
+################ REMOVE A DIRECTORY ------------------------->>>> rmdir <directory_name>
+# Removes empty directories only
+
+################ REMOVE DIRECTORY WITH FILES --------------->>>> rm -r <directory_name>
+# or
+rm -R <directory_name>
+# Force remove directory and contents:
+rm -rf <directory_name>
+
+################ CHECK COMMAND LOCATION --------------------->>>> which <command>
+# Example:
+which ls
+# Output: /usr/bin/ls
+
+################ DISPLAY MANUAL / HELP ---------------------->>>> man <command>
+# Example:
+man ls
+# Press 'q' to exit manual
+
+################ CREATE ALIAS (SHORTCUT COMMAND) ------------>>>> alias <shortcut>='<actual_command>'
+# Example:
+alias ll='ls -lah'
+
+################ VIEW ALL ACTIVE ALIASES -------------------->>>> alias
+
+################ REMOVE AN ALIAS ---------------------------->>>> unalias <shortcut>
+# Example:
+unalias ll
+
+################ MAKE ALIAS PERMANENT ----------------------->>>> nano ~/.bashrc
+# Add alias at the end of the file:
+alias ll='ls -lah'
+# Save and reload file:
+source ~/.bashrc
+
+################ SEARCH INSIDE FILES ------------------------->>>> grep <pattern> <filename>
+# Example:
+grep "error" /var/log/syslog
+# Search recursively inside a folder:
+grep -r "error" /var/log/
+
+################ FIND FILES BY NAME ------------------------->>>> find <path> -name "<pattern>"
+# Example:
+find /home -name "*.log"
+
+################ CHECK DISK USAGE --------------------------->>>> df -h
+################ CHECK MEMORY USAGE ------------------------->>>> free -h
+################ CHECK CURRENT RUNNING PROCESSES ------------>>>> ps aux
+################ CHECK ACTIVE NETWORK CONNECTIONS ----------->>>> netstat -tuln
+# or
+ss -tuln
+
+################ DISPLAY SYSTEM INFO ------------------------>>>> uname -a
+################ DISPLAY CURRENT USER ----------------------->>>> whoami
+################ LIST ALL LOGGED-IN USERS ------------------->>>> who
+################ DISPLAY COMMAND HISTORY ------------------->>>> history
+################ CLEAR TERMINAL SCREEN ---------------------->>>> clear
+# or use shortcut: Ctrl + L
+
+################ SHOW SYSTEM UPTIME ------------------------->>>> uptime
+################ SHOW CURRENT DATE & TIME ------------------->>>> date
+################ DISPLAY TOP RUNNING PROCESSES -------------->>>> top
+################ EXIT TERMINAL OR SESSION ------------------->>>> exit
+
+
+
