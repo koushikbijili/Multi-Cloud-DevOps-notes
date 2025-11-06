@@ -1,0 +1,461 @@
+# Day 2 – Users, Groups, and Permissions
+
+---
+
+## 1. Why User and Permission Management Matters in DevOps
+
+When working in DevOps, you manage servers accessed by multiple people — developers, testers, automation tools, and deployment services (like Jenkins, Docker, or Ansible).
+
+If permissions are wrong:
+
+* Anyone could modify or delete critical files.
+* Sensitive data or scripts could be exposed.
+* Automation tools might fail to execute because of access issues.
+
+So understanding Linux **users, groups, and permissions** is vital for:
+
+* Server security
+* Controlled access
+* CI/CD automation and scripting
+
+---
+
+## 2. Understanding Users in Linux
+
+A **user** is anyone who can log in and interact with the Linux system.
+
+Each user has:
+
+* A **username**
+* A **UID (User ID)** — unique number assigned to that user
+* A **home directory** (default location for user files)
+* A **default shell** (like `/bin/bash`)
+
+All user account information is stored in the file `/etc/passwd`.
+
+Example line from `/etc/passwd`:
+
+```
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+```
+
+### Breakdown:
+
+| Field        | Meaning                                                 |
+| ------------ | ------------------------------------------------------- |
+| ubuntu       | Username                                                |
+| x            | Password placeholder (actual password in `/etc/shadow`) |
+| 1000         | UID (User ID)                                           |
+| 1000         | GID (Group ID)                                          |
+| Ubuntu       | Full name or description                                |
+| /home/ubuntu | Home directory                                          |
+| /bin/bash    | Default login shell                                     |
+
+---
+
+## 3. Managing Users
+
+### Create a User
+
+```bash
+sudo adduser devuser
+```
+
+This creates:
+
+* A new user named `devuser`
+* A home directory `/home/devuser`
+* Default shell `/bin/bash`
+* Prompts for a password
+
+### Set or Change Password
+
+```bash
+sudo passwd devuser
+```
+
+Allows you to reset or set a password.
+
+### Switch to Another User
+
+```bash
+su - devuser
+```
+
+`su` means "substitute user".
+`-` ensures you switch fully into that user’s environment (home directory, shell, variables).
+
+Return to the previous user:
+
+```bash
+exit
+```
+
+### Display the Current User
+
+```bash
+whoami
+```
+
+### View All System Users
+
+```bash
+cat /etc/passwd
+```
+
+or
+
+```bash
+cut -d: -f1 /etc/passwd
+```
+
+This displays all usernames only.
+
+---
+
+## 4. Understanding Groups
+
+A **group** is a collection of users.
+Each user can belong to one **primary group** and multiple **secondary groups**.
+
+Groups help manage permissions efficiently:
+
+* Instead of giving permissions to 10 users individually,
+* You create one group and assign all 10 users to it.
+
+---
+
+## 5. Managing Groups
+
+### Create a Group
+
+```bash
+sudo groupadd developers
+```
+
+### Add a User to a Group
+
+```bash
+sudo usermod -aG developers devuser
+```
+
+Explanation:
+
+* `-aG` → append the user to the specified group without removing from others.
+
+### View Which Groups a User Belongs To
+
+```bash
+groups devuser
+```
+
+Example output:
+
+```
+devuser : devuser developers
+```
+
+### Delete a Group
+
+```bash
+sudo groupdel developers
+```
+
+### Delete a User
+
+```bash
+sudo deluser devuser
+```
+
+---
+
+## 6. Understanding File Permissions (rwx)
+
+Run `ls -l` to see file permissions.
+
+Example:
+
+```
+-rwxr-xr--
+```
+
+### Breakdown:
+
+| Part | Meaning                                     |
+| ---- | ------------------------------------------- |
+| -    | File type (`-` for file, `d` for directory) |
+| rwx  | Owner permissions → read, write, execute    |
+| r-x  | Group permissions → read, execute           |
+| r--  | Others permissions → read only              |
+
+### Permission Types:
+
+| Symbol | Description                                    |
+| ------ | ---------------------------------------------- |
+| r      | Read (view file contents or list directory)    |
+| w      | Write (modify file or add/remove in directory) |
+| x      | Execute (run as a program or script)           |
+
+---
+
+## 7. Changing File Permissions
+
+You can modify permissions in two ways — **symbolic** and **numeric**.
+
+### (a) Symbolic Method
+
+```bash
+chmod u+x file.sh      # Add execute for owner
+chmod g-w file.txt     # Remove write from group
+chmod a=r file.txt     # Everyone read-only
+```
+
+### (b) Numeric Method
+
+Each permission type has a numeric value:
+
+```
+r = 4, w = 2, x = 1
+```
+
+Add them up for each entity (user, group, others):
+
+| Permission | Value | Meaning        |
+| ---------- | ----- | -------------- |
+| 7          | rwx   | Full access    |
+| 6          | rw-   | Read + Write   |
+| 5          | r-x   | Read + Execute |
+| 4          | r--   | Read only      |
+
+Example:
+
+```bash
+chmod 755 script.sh   # u=rwx, g=rx, o=rx
+chmod 644 file.txt    # u=rw, g=r, o=r
+```
+
+---
+
+## 8. Changing Ownership
+
+Every file and directory has an **owner** and a **group**.
+
+To change them:
+
+```bash
+sudo chown devuser:developers file.txt
+```
+
+Changes:
+
+* Owner → devuser
+* Group → developers
+
+To apply this recursively to all files inside a directory:
+
+```bash
+sudo chown -R devuser:developers /opt/project
+```
+
+---
+
+## 9. Restricting Access to Sensitive Folders
+
+To make a directory accessible only by the owner:
+
+```bash
+chmod 700 ~/private
+```
+
+Now:
+
+* Owner: full access
+* Group: none
+* Others: none
+
+To make a file read-only for everyone:
+
+```bash
+chmod 444 file.txt
+```
+
+To make a script executable by everyone:
+
+```bash
+chmod +x deploy.sh
+```
+
+---
+
+## 10. Checking User and Group Information
+
+### Show Current User’s UID and Groups
+
+```bash
+id
+```
+
+### Show Specific User Info
+
+```bash
+id devuser
+```
+
+Example output:
+
+```
+uid=1001(devuser) gid=1001(devuser) groups=1001(devuser),1002(developers)
+```
+
+---
+
+## 11. Default File Permissions (umask)
+
+When you create a file or directory, Linux doesn’t give full `777` permissions.
+It uses a **default permission mask (umask)**.
+
+View current umask:
+
+```bash
+umask
+```
+
+Example output:
+
+```
+0022
+```
+
+This means:
+
+* Default for directories = 755
+* Default for files = 644
+
+You can temporarily change umask:
+
+```bash
+umask 002
+```
+
+---
+
+## 12. Important System Files
+
+| File           | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `/etc/passwd`  | Stores user account information                   |
+| `/etc/group`   | Stores group information                          |
+| `/etc/shadow`  | Stores encrypted user passwords (root only)       |
+| `/etc/sudoers` | Defines which users can run admin commands (sudo) |
+
+---
+
+## 13. Useful Commands for User and Permission Management
+
+```bash
+# Show current user
+whoami
+
+# Show all users currently logged in
+who
+
+# Show system activity of all logged-in users
+w
+
+# Show last logged in users
+last
+
+# Check file ownership and permissions
+ls -l
+
+# Show detailed file stats
+stat filename
+
+# Check all groups
+cat /etc/group
+```
+
+---
+
+## 14. Practice Exercise for Day 2
+
+**Scenario:**
+You are managing a DevOps project. Two users (`devuser`, `tester`) are collaborating in a shared folder `/opt/project`.
+
+### Steps:
+
+1. Create two users:
+
+   ```bash
+   sudo adduser devuser
+   sudo adduser tester
+   ```
+
+2. Create a group for the team:
+
+   ```bash
+   sudo groupadd projectteam
+   ```
+
+3. Add users to the group:
+
+   ```bash
+   sudo usermod -aG projectteam devuser
+   sudo usermod -aG projectteam tester
+   ```
+
+4. Create a shared directory:
+
+   ```bash
+   sudo mkdir /opt/project
+   ```
+
+5. Assign group ownership:
+
+   ```bash
+   sudo chown :projectteam /opt/project
+   ```
+
+6. Give group read/write/execute access:
+
+   ```bash
+   sudo chmod 770 /opt/project
+   ```
+
+7. Verify permissions:
+
+   ```bash
+   ls -ld /opt/project
+   ```
+
+   Output should look like:
+
+   ```
+   drwxrwx--- 2 root projectteam 4096 Nov 6 18:00 /opt/project
+   ```
+
+8. Test with both users:
+
+   ```bash
+   su - devuser
+   cd /opt/project
+   touch devfile.txt
+   exit
+
+   su - tester
+   cd /opt/project
+   ls
+   exit
+   ```
+
+Both users should be able to read/write inside `/opt/project`.
+
+---
+
+## 15. Summary
+
+* Every file and directory in Linux has **ownership and permissions**.
+* Users are individuals; groups are collections of users.
+* Permissions control who can **read, write, or execute**.
+* Use `chmod` to change permissions, `chown` to change ownership.
+* Always assign the **minimum access required** (Principle of Least Privilege).
