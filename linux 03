@@ -1,0 +1,143 @@
+################ BECOME ROOT USER -------------------------------->>>> sudo -i
+# or
+sudo su
+# Exit root user:
+exit
+
+################ RUN A COMMAND WITH ROOT PRIVILEGES -------------->>>> sudo <command>
+# Example:
+sudo apt update
+
+################ CHECK WHICH USERS HAVE SUDO ACCESS -------------->>>> getent group sudo
+
+################ ADD USER TO SUDO GROUP -------------------------->>>> sudo usermod -aG sudo <username>
+# Example:
+sudo usermod -aG sudo devuser
+
+################ VERIFY USER GROUP MEMBERSHIP -------------------->>>> groups <username>
+# Example:
+groups devuser
+
+################ VIEW CURRENT USER -------------------------------->>>> whoami
+
+################ VIEW ALL USERS IN THE SYSTEM -------------------->>>> cat /etc/passwd
+# Only show usernames:
+cut -d: -f1 /etc/passwd
+
+################ CHECK FILE PERMISSIONS AND OWNERSHIP ------------>>>> ls -l
+# Example Output:
+# -rw-r--r-- 1 ubuntu ubuntu 4096 Nov  7 12:00 file.txt
+
+################ VIEW DETAILED FILE INFORMATION ------------------>>>> stat <filename>
+# Example:
+stat script.sh
+
+################ CHANGE FILE OWNER AND GROUP --------------------->>>> sudo chown <user>:<group> <file>
+# Example:
+sudo chown devuser:developers file.txt
+# Change ownership recursively for a directory:
+sudo chown -R devuser:developers /opt/project
+
+################ CHANGE GROUP OWNERSHIP ONLY --------------------->>>> sudo chgrp <groupname> <file>
+# Example:
+sudo chgrp developers project.zip
+
+################ CHANGE FILE PERMISSIONS ------------------------->>>> chmod <options> <file>
+# Symbolic Examples:
+chmod u+x file.sh       # Add execute for user
+chmod g-w file.txt      # Remove write for group
+chmod a=r file.txt      # Everyone read-only
+
+# Numeric Examples:
+chmod 755 script.sh     # u=rwx, g=rx, o=rx
+chmod 644 file.txt      # u=rw, g=r, o=r
+
+################ FIX COMMON ERRORS ------------------------------->>>> chmod +x <scriptname>
+# Adds execute permission to fix “Permission denied” errors for scripts.
+
+################ RESTRICT DIRECTORY ACCESS ----------------------->>>> chmod 700 <directory>
+# Example:
+chmod 700 ~/private
+
+################ MAKE FILE READ-ONLY FOR EVERYONE ---------------->>>> chmod 444 <filename>
+
+################ GIVE GROUP FULL ACCESS -------------------------->>>> chmod g+rwx <file_or_directory>
+
+################ CHANGE OWNERSHIP AFTER USING SUDO --------------->>>> sudo chown -R <user>:<group> <directory>
+# Example:
+sudo chown -R ubuntu:ubuntu /project
+
+################ CHECK SUDO ACCESS FOR USER ---------------------->>>> sudo -v
+# Validates sudo permission without running a command.
+
+################ RUN A COMMAND AS ANOTHER USER ------------------->>>> sudo -u <username> <command>
+# Example:
+sudo -u devuser whoami
+
+################ VIEW SYSTEM LOGS OF SUDO COMMANDS --------------->>>> sudo cat /var/log/auth.log | grep sudo
+
+################ EDIT SUDOERS FILE SAFELY ------------------------->>>> sudo visudo
+# Example entry:
+# devuser ALL=(ALL:ALL) ALL   -> Full sudo access
+# devuser ALL=(ALL) NOPASSWD: /bin/systemctl restart apache2
+# -> Allows only Apache restart without password
+
+################ VIEW DEFAULT FILE CREATION PERMISSIONS ---------->>>> umask
+# Example: 0022 means default 755 for directories, 644 for files
+
+################ CHANGE DEFAULT UMASK TEMPORARILY ---------------->>>> umask 002
+# New files will have 664, directories 775
+
+################ CHECK ACTIVE LOGGED-IN USERS -------------------->>>> who
+################ CHECK SYSTEM ACTIVITY --------------------------->>>> w
+################ CHECK LAST LOGINS ------------------------------->>>> last
+################ CLEAR TERMINAL ---------------------------------->>>> clear
+# or Ctrl + L
+
+################ FIX PERMISSION DENIED (SCRIPT EXECUTION) -------->>>> chmod +x <scriptname>
+
+################ FIX PERMISSION DENIED (WRITE TO FOLDER) --------->>>> sudo chown <user>:<group> <folder>
+sudo chmod 755 <folder>
+
+################ FIX OWNERSHIP FOR JENKINS / AUTOMATION USERS ---->>>> sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace
+sudo chmod -R 775 /var/lib/jenkins/workspace
+
+################ PRACTICE LAB: CREATE USERS ---------------------->>>> sudo adduser dev1
+sudo adduser dev2
+
+################ CREATE GROUP ----------------------------------->>>> sudo groupadd devteam
+
+################ ADD USERS TO GROUP ------------------------------>>>> sudo usermod -aG devteam dev1
+sudo usermod -aG devteam dev2
+
+################ CREATE SHARED DIRECTORY ------------------------->>>> sudo mkdir /opt/devshare
+
+################ SET GROUP OWNERSHIP AND PERMISSIONS ------------->>>> sudo chown :devteam /opt/devshare
+sudo chmod 770 /opt/devshare
+
+################ VERIFY PERMISSIONS ------------------------------>>>> ls -ld /opt/devshare
+
+################ CREATE TEST FILE AS USER dev1 ------------------->>>> su - dev1
+cd /opt/devshare
+touch test1.txt
+exit
+
+################ TRY DELETION AS USER dev2 ----------------------->>>> su - dev2
+rm /opt/devshare/test1.txt
+# Output: Permission denied (owned by dev1)
+exit
+
+################ SET SGID ON SHARED DIRECTORY -------------------->>>> chmod g+s /opt/devshare
+# Ensures new files inherit the group of the directory.
+
+################ SET STICKY BIT ON SHARED DIRECTORY -------------->>>> chmod +t /opt/devshare
+# Only file owner can delete their own files inside shared folder.
+
+################ CHECK SPECIAL PERMISSION BITS ------------------->>>> ls -ld /tmp
+# You will see “t” at the end of permissions if sticky bit is set.
+
+################ FIX COMMON AUTOMATION PERMISSIONS --------------->>>> sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
+################ CHECK MOUNTED FILE SYSTEMS ---------------------->>>> df -h
+################ DISPLAY ACTIVE PROCESSES ------------
