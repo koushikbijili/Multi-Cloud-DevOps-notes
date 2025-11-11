@@ -1,0 +1,236 @@
+# GIT & VERSION CONTROL 
+
+###############################################################
+###################### GIT INSTALLATION ########################
+###############################################################
+
+################ INSTALL GIT ---------------------------------->>>> sudo apt update
+sudo apt install git -y
+
+################ CHECK GIT VERSION ---------------------------->>>> git --version
+
+################ CONFIGURE GLOBAL USER DETAILS ---------------->>>> git config --global user.name "Koushik"
+git config --global user.email "koushik@example.com"
+
+################ VERIFY CONFIGURATION ------------------------->>>> git config --list
+###############################################################
+
+
+###############################################################
+##################### INITIAL SETUP ############################
+###############################################################
+
+################ CREATE PROJECT FOLDER ------------------------>>>> mkdir -p ~/devops/day7_git
+cd ~/devops/day7_git
+
+################ INITIALIZE GIT REPOSITORY -------------------->>>> git init
+# Creates a hidden .git folder to track project changes
+
+################ CHECK REPOSITORY STATUS ---------------------->>>> git status
+###############################################################
+
+
+###############################################################
+###################### BASIC OPERATIONS ########################
+###############################################################
+
+################ CREATE FILE ---------------------------------->>>> echo "Hello Git and DevOps" > readme.txt
+
+################ STAGE FILE FOR COMMIT ------------------------>>>> git add readme.txt
+# Stage all files:
+git add .
+
+################ COMMIT FILE --------------------------------->>>> git commit -m "Initial commit - added readme.txt"
+
+################ VIEW COMMIT HISTORY -------------------------->>>> git log
+# Compact version:
+git log --oneline
+
+################ VIEW CURRENT STATUS -------------------------->>>> git status
+###############################################################
+
+
+###############################################################
+###################### MODIFY & TRACK ##########################
+###############################################################
+
+################ EDIT FILE ----------------------------------->>>> echo "Learning version control with Git" >> readme.txt
+
+################ CHECK FILE CHANGES -------------------------->>>> git diff
+
+################ STAGE & COMMIT CHANGES ----------------------->>>> git add readme.txt
+git commit -m "Updated readme with learning note"
+
+################ VIEW STAGED CHANGES ONLY --------------------->>>> git diff --staged
+###############################################################
+
+
+###############################################################
+##################### UNDO & RESTORE ###########################
+###############################################################
+
+################ UNSTAGE A FILE ------------------------------->>>> git reset HEAD <file>
+
+################ UNDO LAST COMMIT (KEEP CHANGES) -------------->>>> git reset --soft HEAD~1
+
+################ UNDO COMMIT AND CHANGES ---------------------->>>> git reset --hard HEAD~1
+
+################ RESTORE DELETED FILE ------------------------->>>> git checkout -- <file>
+###############################################################
+
+
+###############################################################
+###################### BRANCHING ###############################
+###############################################################
+
+################ CREATE A NEW BRANCH -------------------------->>>> git branch feature1
+
+################ SWITCH TO ANOTHER BRANCH -------------------->>>> git checkout feature1
+
+################ CREATE & SWITCH IN ONE STEP ----------------->>>> git checkout -b feature2
+
+################ VIEW ALL BRANCHES ---------------------------->>>> git branch
+# Current branch marked with *
+
+################ MERGE BRANCH INTO MAIN ----------------------->>>> git checkout main
+git merge feature1
+
+################ DELETE A BRANCH ------------------------------>>>> git branch -d feature1
+###############################################################
+
+
+###############################################################
+###################### MERGE CONFLICTS #########################
+###############################################################
+# When conflicts occur, you’ll see markers like:
+
+<<<<<<< HEAD
+code from main branch
+=======
+code from feature branch
+>>>>>>> feature1
+
+# Fix by editing manually, then:
+git add <file>
+git commit -m "Resolved merge conflict"
+###############################################################
+
+
+###############################################################
+##################### REMOTE REPOSITORY ########################
+###############################################################
+
+################ ADD REMOTE REPOSITORY ------------------------>>>> git remote add origin https://github.com/koushikbijili/devops-learning.git
+
+################ VERIFY REMOTE ------------------------------->>>> git remote -v
+
+################ PUSH CHANGES TO REMOTE ----------------------->>>> git branch -M main
+git push -u origin main
+
+################ PULL LATEST CHANGES -------------------------->>>> git pull origin main
+
+################ CLONE EXISTING REPO -------------------------->>>> git clone https://github.com/koushikbijili/devops-learning.git
+###############################################################
+
+
+###############################################################
+######################## .GITIGNORE ############################
+###############################################################
+
+################ CREATE .GITIGNORE FILE ----------------------->>>> nano .gitignore
+
+################ SAMPLE CONTENT -------------------------------
+node_modules/
+.env
+*.log
+__pycache__/
+build/
+###############################################################
+
+
+###############################################################
+########################## TAGGING #############################
+###############################################################
+
+################ CREATE TAG ---------------------------------->>>> git tag v1.0
+
+################ LIST ALL TAGS ------------------------------->>>> git tag
+
+################ PUSH TAG TO REMOTE -------------------------->>>> git push origin v1.0
+###############################################################
+
+
+###############################################################
+###################### SUMMARY COMMANDS ########################
+###############################################################
+
+# Initialize repository
+git init
+
+# Stage and commit
+git add . && git commit -m "message"
+
+# Check history
+git log --oneline
+
+# Branch management
+git branch <name>
+git checkout <name>
+git merge <name>
+git branch -d <name>
+
+# Remote repository
+git remote add origin <url>
+git push -u origin main
+git pull origin main
+
+# Undo
+git reset --soft HEAD~1
+git reset --hard HEAD~1
+###############################################################
+
+
+###############################################################
+######################## PRACTICE TASKS ########################
+###############################################################
+
+################ 1. CREATE A LOCAL REPO ---------------------->>>> mkdir ~/devops/day7_git && cd ~/devops/day7_git && git init
+
+################ 2. ADD FILES & COMMIT ----------------------->>>> echo "Day 7 Practice" > notes.txt
+git add .
+git commit -m "Initial commit with notes.txt"
+
+################ 3. CREATE A BRANCH -------------------------->>>> git checkout -b feature-readme
+echo "Git learning branch practice" >> notes.txt
+git add .
+git commit -m "Updated notes on feature-readme branch"
+
+################ 4. MERGE BRANCH ----------------------------->>>> git checkout main
+git merge feature-readme
+
+################ 5. CREATE .GITIGNORE ------------------------>>>> echo "*.log" > .gitignore
+git add .gitignore
+git commit -m "Added .gitignore to ignore log files"
+
+################ 6. CONNECT TO GITHUB ------------------------>>>> git remote add origin https://github.com/koushikbijili/devops-learning.git
+git branch -M main
+git push -u origin main
+
+################ 7. CLONE REPOSITORY ------------------------->>>> git clone https://github.com/koushikbijili/devops-learning.git test_clone
+
+################ 8. CREATE VERSION TAG ----------------------->>>> git tag v1.0
+git push origin v1.0
+###############################################################
+
+
+###############################################################
+######################## KEY TAKEAWAYS #########################
+###############################################################
+# - Git is a distributed version control system.
+# - It tracks every change in your project history.
+# - The workflow: Working Directory → Staging Area → Local Repo → Remote Repo.
+# - Branching allows multiple developers to work safely and merge later.
+# - Git + GitHub are the backbone of CI/CD pipelines.
+# - Use .gitignore to avoid pushing temporary or sensitive files.
+# - Tags mark specific versions or releases (v1.0, v2.0, etc.).
+###############################################################
