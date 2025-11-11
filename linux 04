@@ -1,0 +1,95 @@
+##File Operations, Archiving, and Automation
+
+---
+
+## Overview
+
+##focused on **Linux file management, compression, search operations, and automation** using shell scripts and cron jobs.  
+These are everyday tasks in DevOps for handling backups, monitoring, and log maintenance.
+
+By the end of this session, I learned how to:
+- Copy, move, and search files effectively  
+- Compress and extract archives using `tar`, `gzip`, and `zip`  
+- Find files by name, size, or date  
+- Redirect outputs using `>` and `>>`  
+- Schedule automated tasks with `cron`  
+- Write simple shell scripts for maintenance automation  
+
+---
+
+## 1. File and Directory Operations
+
+```bash
+################ SHOW CURRENT DIRECTORY ------------------------>>>> pwd
+
+################ LIST FILES AND DIRECTORIES --------------------->>>> ls -l
+# ls -a   → show hidden files
+# ls -lh  → human-readable sizes
+# ls -R   → list recursively
+
+################ CHANGE DIRECTORY ------------------------------>>>> cd <path>
+# cd ..   → go one level up
+# cd ~    → go to home directory
+# cd -    → return to previous directory
+
+################ CREATE DIRECTORY ------------------------------>>>> mkdir <name>
+# Create nested folders:
+mkdir -p devops/{scripts,notes,logs}
+
+################ REMOVE DIRECTORY ------------------------------>>>> rmdir <name>
+# or remove non-empty folder:
+rm -r <folder_name>
+
+################ COPY FILES ------------------------------------>>>> cp <source> <destination>
+# Copy directory recursively:
+cp -r project/ backup_project/
+
+################ MOVE OR RENAME FILES -------------------------->>>> mv <source> <destination>
+# Example:
+mv oldname.txt newname.txt
+
+################ DELETE FILES ---------------------------------->>>> rm <filename>
+# Force delete without confirmation:
+rm -f <filename>
+# Delete recursively:
+rm -rf <folder_name>
+
+################ DISPLAY FILE CONTENT -------------------------->>>> cat <file>
+################ PAGINATED VIEW -------------------------------->>>> less <file>################ CREATE TAR ARCHIVE ---------------------------->>>> tar -cvf backup.tar /home/ubuntu/project
+################ EXTRACT TAR ARCHIVE --------------------------->>>> tar -xvf backup.tar
+################ CREATE COMPRESSED TAR ARCHIVE ---------------->>>> tar -czvf backup.tar.gz /home/ubuntu/project
+################ EXTRACT TAR.GZ ARCHIVE ------------------------>>>> tar -xzvf backup.tar.gz
+################ COMPRESS SINGLE FILE -------------------------->>>> gzip file.txt
+################ DECOMPRESS FILE ------------------------------->>>> gunzip file.txt.gz
+################ ZIP AND UNZIP -------------------------------->>>> zip -r project.zip project/
+unzip project.zip
+################ SHOW DIFFERENCE BETWEEN FILES ----------------->>>> diff file1 file2
+
+################ FIND FILE BY NAME ----------------------------->>>> find /home -name "file.txt"
+################ FIND FILES BY EXTENSION ----------------------->>>> find /var/log -name "*.log"
+################ FIND FILES MODIFIED IN LAST 2 DAYS ------------>>>> find /home -mtime -2
+################ FIND AND DELETE FILES ------------------------->>>> find /tmp -name "*.tmp" -delete
+################ FIND FILES LARGER THAN 10MB ------------------>>>> find /var/log -size +10M
+################ LOCATE FILES (FASTER METHOD) ----------------->>>> sudo updatedb
+locate nginx.conf
+
+################ REDIRECT OUTPUT TO FILE ----------------------->>>> ls -l > output.txt
+################ APPEND OUTPUT TO FILE ------------------------->>>> ls -l >> output.txt
+################ REDIRECT ERRORS ONLY -------------------------->>>> command 2> errors.txt
+################ REDIRECT OUTPUT AND ERRORS -------------------->>>> command > all_output.txt 2>&1
+################ USE PIPE TO CHAIN COMMANDS -------------------->>>> cat file.txt | grep "error"
+################ FIND RUNNING PROCESS BY NAME ----------------->>>> ps aux | grep nginx
+
+################ VIEW EXISTING CRON JOBS ----------------------->>>> crontab -l
+################ EDIT CRON JOBS ------------------------------->>>> crontab -e
+################ REMOVE ALL CRON JOBS ------------------------->>>> crontab -r
+################ VIEW SYSTEM CRON JOBS ------------------------>>>> cat /etc/crontab
+
+* * * * * command
+│ │ │ │ └── Day of week (0–6)
+│ │ │ └──── Month (1–12)
+│ │ └────── Day of month (1–31)
+│ └──────── Hour (0–23)
+└────────── Minute (0–59)
+
+
