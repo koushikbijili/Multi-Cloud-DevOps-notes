@@ -1,0 +1,222 @@
+# DAY 5 – LINUX NETWORKING, FIREWALL, AND PROCESS MANAGEMENT
+
+###############################################################
+###################### NETWORK COMMANDS ########################
+###############################################################
+
+################ SHOW ALL NETWORK INTERFACES ------------------>>>> ip addr show
+# or short form:
+ip a
+
+################ SHOW ONLY ACTIVE INTERFACES ------------------>>>> ip link show up
+
+################ DISPLAY DEFAULT GATEWAY ---------------------->>>> ip route show
+# or
+route -n
+
+################ CHECK CONNECTIVITY ---------------------------->>>> ping google.com
+# Stop with Ctrl + C
+
+################ CHECK DNS RESOLUTION -------------------------->>>> nslookup google.com
+# or
+dig google.com
+
+################ CHECK OPEN PORTS ------------------------------>>>> sudo netstat -tuln
+# or modern tool:
+sudo ss -tuln
+# Flags: t=TCP, u=UDP, l=listening, n=show numeric ports
+
+################ FIND WHICH PROCESS IS USING A PORT ------------>>>> sudo lsof -i :80
+# Example output shows PID and service using port 80
+
+################ CHECK HOSTNAME -------------------------------->>>> hostname
+
+################ CHANGE HOSTNAME ------------------------------->>>> sudo hostnamectl set-hostname myserver
+
+################ CHECK CURRENT IP AND ROUTE -------------------->>>> ip route
+###############################################################
+
+
+###############################################################
+#################### COMMON NETWORK FILES ######################
+###############################################################
+
+################ /etc/hosts FILE --------------------------------
+# Maps hostnames to IP addresses
+cat /etc/hosts
+
+################ /etc/resolv.conf FILE ---------------------------
+# Contains DNS nameservers
+cat /etc/resolv.conf
+
+################ /etc/hostname FILE ------------------------------
+# Stores system hostname
+cat /etc/hostname
+###############################################################
+
+
+###############################################################
+######################## PORT MANAGEMENT #######################
+###############################################################
+
+################ CHECK RUNNING SERVICES AND PORTS -------------->>>> sudo ss -tulnp
+# Shows PID and service name using each port
+
+################ COMMON SERVICE PORTS ---------------------------
+# HTTP - 80
+# HTTPS - 443
+# SSH - 22
+# Jenkins - 8080
+# Node.js - 5000
+# MySQL - 3306
+# Docker - 2375
+###############################################################
+
+
+###############################################################
+######################## FIREWALL (UFW) ########################
+###############################################################
+
+################ CHECK FIREWALL STATUS ------------------------>>>> sudo ufw status
+
+################ ENABLE FIREWALL ------------------------------>>>> sudo ufw enable
+
+################ ALLOW SPECIFIC PORT -------------------------->>>> sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 8080
+
+################ ALLOW PORT WITH PROTOCOL --------------------->>>> sudo ufw allow 5000/tcp
+
+################ DENY OR REMOVE A RULE ------------------------>>>> sudo ufw deny 23
+sudo ufw delete allow 8080
+
+################ VIEW FIREWALL RULES -------------------------->>>> sudo ufw status numbered
+
+################ DISABLE FIREWALL ----------------------------->>>> sudo ufw disable
+
+# Always ensure SSH (22) is allowed before enabling firewall
+###############################################################
+
+
+###############################################################
+##################### PROCESS MANAGEMENT #######################
+###############################################################
+
+################ VIEW ALL RUNNING PROCESSES ------------------->>>> ps aux
+# USER - process owner, PID - process ID, %CPU - CPU usage, %MEM - memory usage
+
+################ SEARCH FOR A PROCESS ------------------------->>>> ps aux | grep nginx
+
+################ DISPLAY PROCESS TREE ------------------------->>>> pstree
+
+################ KILL A PROCESS ------------------------------->>>> kill <PID>
+# Force kill:
+kill -9 <PID>
+
+################ MONITOR PROCESSES LIVE ----------------------->>>> top
+# or modern version:
+htop
+# (Install: sudo apt install htop -y)
+# Inside top: press M to sort by memory, P to sort by CPU
+
+################ CHECK CPU AND MEMORY USAGE ------------------->>>> free -h
+df -h
+uptime
+
+################ CHECK SERVICE STATUS ------------------------->>>> sudo systemctl status nginx
+################ START / STOP / RESTART SERVICE --------------->>>> sudo systemctl start nginx
+sudo systemctl stop nginx
+sudo systemctl restart nginx
+
+################ ENABLE / DISABLE SERVICE --------------------->>>> sudo systemctl enable nginx
+sudo systemctl disable nginx
+
+################ LIST ACTIVE SERVICES ------------------------->>>> systemctl list-units --type=service --state=running
+
+################ VIEW SYSTEM LOGS ----------------------------->>>> sudo journalctl -xe
+###############################################################
+
+
+###############################################################
+#################### TROUBLESHOOTING TIPS ######################
+###############################################################
+
+################ FIX “PORT ALREADY IN USE” -------------------->>>> sudo lsof -i :<port>
+sudo kill <PID>
+
+################ FIX “CONNECTION REFUSED” --------------------->>>> sudo ufw status
+sudo systemctl status <service_name>
+
+################ FIX “DNS NOT RESOLVING” ---------------------->>>> cat /etc/resolv.conf
+
+################ FIX “HIGH CPU USAGE” ------------------------->>>> top
+sudo kill <PID>
+
+################ FIX “SERVICE NOT STARTING” ------------------->>>> sudo journalctl -xe
+###############################################################
+
+
+###############################################################
+#################### SYSTEM AUDIT SCRIPT #######################
+###############################################################
+
+################ CREATE FOLDER ------------------------------->>>> mkdir -p ~/devops/day5
+cd ~/devops/day5
+
+################ CREATE SYSTEM AUDIT SCRIPT ------------------>>>> nano system_audit.sh
+
+################ SCRIPT CONTENT -------------------------------
+
+#!/bin/bash
+echo "-------------------------------------"
+echo "System Audit Report - $(date)"
+echo "-------------------------------------"
+echo ""
+echo "[1] Hostname and IP Info:"
+hostname
+ip addr show | grep inet | grep -v inet6
+echo ""
+echo "[2] Top 5 CPU-consuming processes:"
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 6
+echo ""
+echo "[3] Open Network Ports:"
+sudo ss -tuln | head -n 10
+echo ""
+echo "[4] Active Services:"
+systemctl list-units --type=service --state=running | head -n 10
+echo ""
+echo "[5] Disk Usage:"
+df -h | grep -v tmpfs
+echo ""
+echo "-------------------------------------"
+
+################ MAKE IT EXECUTABLE --------------------------->>>> chmod +x system_audit.sh
+
+################ RUN THE SCRIPT ------------------------------->>>> ./system_audit.sh
+###############################################################
+
+
+###############################################################
+###################### PRACTICE TASKS ##########################
+###############################################################
+
+################ 1. CHECK NETWORK INFO ------------------------>>>> ip a
+################ 2. CHECK OPEN PORTS -------------------------->>>> sudo ss -tuln
+################ 3. CHECK FIREWALL STATUS --------------------->>>> sudo ufw status
+################ 4. ALLOW JENKINS PORT 8080 ------------------>>>> sudo ufw allow 8080
+################ 5. FIND PROCESS USING PORT 80 --------------->>>> sudo lsof -i :80
+################ 6. CHECK CPU & MEMORY USAGE ---------------->>>> top
+################ 7. RESTART NGINX SERVICE -------------------->>>> sudo systemctl restart nginx
+################ 8. RUN AUDIT SCRIPT -------------------------->>>> ./system_audit.sh
+###############################################################
+
+
+###############################################################
+######################## KEY TAKEAWAYS #########################
+###############################################################
+# - Networking: 'ip', 'ping', 'ss', and 'lsof' help check connectivity and open ports.
+# - Firewall: Manage security rules using UFW.
+# - Process Management: Use 'ps', 'top', 'systemctl' for controlling services.
+# - Automation: Use bash scripts to audit and monitor servers.
+# - Real DevOps use case: Identify blocked ports, high CPU usage, or stopped services quickly.
+###############################################################
