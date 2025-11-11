@@ -1,0 +1,185 @@
+# LINUX SYSTEM MONITORING AND LOG MANAGEMENT
+
+###############################################################
+########################## BASICS ##############################
+###############################################################
+
+################ CHECK SYSTEM UPTIME -------------------------->>>> uptime
+# Shows how long the system has been running and CPU load average.
+
+################ LIVE PROCESS MONITOR ------------------------->>>> top
+# P = sort by CPU
+# M = sort by memory
+# q = quit
+
+################ MODERN MONITOR ------------------------------->>>> htop
+# Install: sudo apt install htop -y
+# Provides color-coded, real-time CPU and memory graphs.
+
+################ CHECK MEMORY AND SWAP ------------------------>>>> free -h
+
+################ CHECK DISK USAGE ----------------------------->>>> df -h
+# -h = human-readable format
+
+################ CHECK DIRECTORY SIZE ------------------------->>>> du -sh /var/log
+
+################ TOP 10 LARGEST FILES ------------------------->>>> du -ah /var | sort -rh | head -n 10
+###############################################################
+
+
+###############################################################
+####################### PROCESS MONITOR ########################
+###############################################################
+
+################ SHOW TOP CPU PROCESSES ----------------------->>>> ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
+
+################ SHOW TOP MEMORY PROCESSES -------------------->>>> ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
+
+################ SHOW SYSTEM STATISTICS ----------------------->>>> vmstat 1 5
+# Updates every 1 second, 5 times.
+
+################ CHECK DISK I/O USAGE ------------------------->>>> iostat -xz 1 3
+# Install if missing: sudo apt install sysstat -y
+
+################ CHECK NETWORK TRAFFIC ------------------------>>>> ifstat
+# or
+sar -n DEV 1 3
+###############################################################
+
+
+###############################################################
+########################### LOGS ###############################
+###############################################################
+
+################ VIEW SYSTEM LOGS ----------------------------->>>> cat /var/log/syslog
+################ VIEW LAST 10 LINES --------------------------->>>> tail /var/log/syslog
+################ LIVE LOG MONITOR ----------------------------->>>> tail -f /var/log/syslog
+# Ctrl + C to exit
+
+################ SEARCH LOGS FOR KEYWORDS --------------------->>>> grep "error" /var/log/syslog
+################ CASE-INSENSITIVE SEARCH ---------------------->>>> grep -i "fail" /var/log/auth.log
+################ COUNT NUMBER OF ERRORS ----------------------->>>> grep -ic "error" /var/log/syslog
+
+################ COMMON LOG FILES ------------------------------
+# /var/log/syslog        -> General system logs
+# /var/log/auth.log      -> Authentication & sudo logs
+# /var/log/dpkg.log      -> Package installations
+# /var/log/kern.log      -> Kernel-related logs
+# /var/log/nginx/        -> Web server logs
+# /var/log/apache2/      -> Apache logs
+# /var/log/cron.log      -> Cron job logs
+# /var/log/journal/      -> Systemd logs
+###############################################################
+
+
+###############################################################
+###################### LOG ROTATION ############################
+###############################################################
+
+################ VIEW MAIN CONFIG ----------------------------->>>> cat /etc/logrotate.conf
+################ VIEW SERVICE-SPECIFIC CONFIGS ---------------->>>> ls /etc/logrotate.d/
+################ FORCE LOG ROTATION --------------------------->>>> sudo logrotate /etc/logrotate.conf --debug
+
+################ SAMPLE NGINX LOGROTATE CONFIG ----------------
+/var/log/nginx/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    delaycompress
+    notifempty
+    create 0640 www-data adm
+    sharedscripts
+    postrotate
+        systemctl reload nginx > /dev/null 2>&1 || true
+    endscript
+}
+###############################################################
+
+
+###############################################################
+####################### LOG CHECKER SCRIPT #####################
+###############################################################
+
+################ CREATE FOLDER ------------------------------->>>> mkdir -p ~/devops/day6
+cd ~/devops/day6
+
+################ CREATE SCRIPT ------------------------------->>>> nano log_checker.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+LOG_FILE="/var/log/syslog"
+OUTPUT="$HOME/devops/day6/errors_found.log"
+
+echo "Log Scan Report - $(date)" >> $OUTPUT
+grep -i "error" $LOG_FILE | tail -n 5 >> $OUTPUT
+echo "----------------------------------------" >> $OUTPUT
+echo "" >> $OUTPUT
+
+################ MAKE SCRIPT EXECUTABLE ----------------------->>>> chmod +x log_checker.sh
+################ RUN SCRIPT MANUALLY -------------------------->>>> ./log_checker.sh
+################ CHECK OUTPUT -------------------------------->>>> cat ~/devops/day6/errors_found.log
+
+################ AUTOMATE EVERY 30 MINUTES -------------------->>>> crontab -e
+# Add this line:
+*/30 * * * * /home/ubuntu/devops/day6/log_checker.sh
+###############################################################
+
+
+###############################################################
+################### RESOURCE MONITOR SCRIPT ####################
+###############################################################
+
+################ CREATE SCRIPT ------------------------------->>>> nano resource_monitor.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+echo "----------------------------------------"
+echo "Resource Report - $(date)"
+echo "----------------------------------------"
+echo "[CPU Load]"
+uptime
+echo ""
+echo "[Memory Usage]"
+free -h
+echo ""
+echo "[Disk Usage]"
+df -h | grep -v tmpfs
+echo ""
+echo "[Top 5 Processes]"
+ps -eo pid,cmd,%mem,%cpu --sort=-%cpu | head -n 6
+echo ""
+echo "----------------------------------------"
+
+################ MAKE EXECUTABLE ------------------------------>>>> chmod +x resource_monitor.sh
+################ RUN THE SCRIPT ------------------------------->>>> ./resource_monitor.sh
+###############################################################
+
+
+###############################################################
+######################## PRACTICE TASKS ########################
+###############################################################
+
+################ 1. CHECK SYSTEM HEALTH ----------------------->>>> uptime
+################ 2. CHECK MEMORY & SWAP ----------------------->>>> free -h
+################ 3. CHECK DISK USAGE -------------------------->>>> df -h
+################ 4. CHECK TOP 10 LARGE FILES ----------------->>>> du -ah /var | sort -rh | head
+################ 5. CHECK LIVE LOGS --------------------------->>>> tail -f /var/log/syslog
+################ 6. SEARCH FOR ERRORS ------------------------->>>> grep -i "error" /var/log/syslog
+################ 7. RUN LOG CHECKER SCRIPT ------------------->>>> ./log_checker.sh
+################ 8. RUN RESOURCE MONITOR --------------------->>>> ./resource_monitor.sh
+###############################################################
+
+
+###############################################################
+######################## KEY TAKEAWAYS #########################
+###############################################################
+# - Monitoring CPU, memory, and disk usage helps prevent downtime.
+# - Use top/htop for live process management.
+# - Logs are critical for diagnosing issues.
+# - /var/log stores all major system and service logs.
+# - Use grep and tail -f to find and follow errors in real-time.
+# - Logrotate automatically rotates, compresses, and cleans up old logs.
+# - Bash scripts can automate health checks and error monitoring.
+# - These skills prepare you for tools like CloudWatch, ELK, and Prometheus.
+###############################################################
