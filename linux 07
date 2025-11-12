@@ -1,0 +1,106 @@
+# DAY 7 – LINUX SHELL SCRIPTING BASICS & AUTOMATION (INTRO)
+
+###############################################################
+########################## BASICS ##############################
+###############################################################
+
+################ CREATE DIRECTORY FOR DAY 7 ------------------->>>> mkdir -p ~/devops/day7
+cd ~/devops/day7
+
+################ CREATE FIRST SCRIPT -------------------------->>>> nano hello.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+# My first shell script
+echo "Hello, DevOps!"
+echo "Today, I’m learning Shell Scripting Basics"
+
+################ MAKE EXECUTABLE ------------------------------>>>> chmod +x hello.sh
+
+################ RUN SCRIPT ----------------------------------->>>> ./hello.sh
+###############################################################
+
+
+###############################################################
+###################### SCRIPT STRUCTURE ########################
+###############################################################
+
+# Every bash script contains:
+# 1. Shebang line (#!/bin/bash)
+# 2. Optional comments (#)
+# 3. Commands and logic
+
+# Example:
+#!/bin/bash
+# System information script
+echo "System Name: $(hostname)"
+echo "Current Directory: $(pwd)"
+###############################################################
+
+
+###############################################################
+######################## VARIABLES #############################
+###############################################################
+
+################ DEFINE VARIABLE ------------------------------>>>> name="Koushik"
+echo "Welcome, $name"
+
+################ SCRIPT EXAMPLE ------------------------------->
+#!/bin/bash
+name="Koushik"
+echo "Welcome, $name!"
+
+################ USER INPUT VARIABLE -------------------------->>>> nano input_example.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+echo "Enter your name:"
+read user_name
+echo "Hello $user_name, welcome to DevOps scripting!"
+
+################ RUN SCRIPT ----------------------------------->>>> ./input_example.sh
+###############################################################
+
+
+###############################################################
+####################### SYSTEM VARIABLES #######################
+###############################################################
+
+################ SCRIPT EXAMPLE ------------------------------->
+#!/bin/bash
+echo "User: $USER"
+echo "Home: $HOME"
+echo "Working Directory: $PWD"
+echo "Hostname: $HOSTNAME"
+
+################ RUN SCRIPT ----------------------------------->>>> ./system_vars.sh
+###############################################################
+
+
+###############################################################
+#################### CONDITIONAL STATEMENTS ####################
+###############################################################
+
+################ BASIC IF-ELSE EXAMPLE ------------------------>>>> nano condition.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+echo "Enter a number:"
+read num
+if [ $num -gt 10 ]
+then
+    echo "Number is greater than 10"
+else
+    echo "Number is less than or equal to 10"
+fi
+
+################ RUN SCRIPT ----------------------------------->>>> ./condition.sh
+
+################ COMMON OPERATORS ------------------------------
+# Numeric: -eq, -ne, -gt, -lt, -ge, -le
+# String: =, !=, -z
+# File: -f (file), -d (directory), -e (exists)
+###############################################################
+
+
+#############################
