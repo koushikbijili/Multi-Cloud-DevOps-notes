@@ -1,0 +1,190 @@
+# DAY 8 – LINUX PACKAGE MANAGEMENT & SYSTEM MAINTENANCE
+
+###############################################################
+###################### PACKAGE MANAGEMENT ######################
+###############################################################
+
+################ UPDATE PACKAGE LIST -------------------------->>>> sudo apt update
+
+################ UPGRADE INSTALLED PACKAGES ------------------->>>> sudo apt upgrade -y
+
+################ FULL UPGRADE (KERNEL + DEPENDENCIES) --------->>>> sudo apt full-upgrade -y
+
+################ INSTALL PACKAGE ------------------------------>>>> sudo apt install nginx -y
+
+################ REMOVE PACKAGE (KEEP CONFIG FILES) ------------>>>> sudo apt remove nginx -y
+
+################ COMPLETELY REMOVE PACKAGE -------------------->>>> sudo apt purge nginx -y
+
+################ REMOVE UNUSED DEPENDENCIES ------------------->>>> sudo apt autoremove -y
+
+################ CLEAR PACKAGE CACHE -------------------------->>>> sudo apt clean
+
+################ SEARCH PACKAGE ------------------------------->>>> apt search nginx
+
+################ SHOW PACKAGE INFO ---------------------------->>>> apt show nginx
+###############################################################
+
+
+###############################################################
+###################### SYSTEM INFORMATION ######################
+###############################################################
+
+################ CHECK OS VERSION ----------------------------->>>> lsb_release -a
+
+################ CHECK KERNEL VERSION ------------------------->>>> uname -r
+
+################ CHECK DISTRIBUTION DETAILS ------------------->>>> cat /etc/os-release
+
+################ CHECK CPU INFORMATION ------------------------>>>> lscpu
+
+################ CHECK MEMORY DETAILS ------------------------->>>> cat /proc/meminfo | head
+
+################ CHECK DISK LAYOUT ---------------------------->>>> lsblk
+
+################ CHECK INSTALLED PACKAGES --------------------->>>> dpkg --get-selections | grep nginx
+###############################################################
+
+
+###############################################################
+###################### SERVICE MANAGEMENT ######################
+###############################################################
+
+################ CHECK SERVICE STATUS ------------------------->>>> sudo systemctl status nginx
+
+################ START SERVICE -------------------------------->>>> sudo systemctl start nginx
+
+################ STOP SERVICE --------------------------------->>>> sudo systemctl stop nginx
+
+################ RESTART SERVICE ------------------------------>>>> sudo systemctl restart nginx
+
+################ ENABLE SERVICE AT BOOT ----------------------->>>> sudo systemctl enable nginx
+
+################ DISABLE AUTO START --------------------------->>>> sudo systemctl disable nginx
+
+################ LIST RUNNING SERVICES ------------------------>>>> systemctl list-units --type=service --state=running
+
+################ CHECK FAILED SERVICES ------------------------>>>> systemctl --failed
+###############################################################
+
+
+###############################################################
+###################### REPOSITORY MANAGEMENT ###################
+###############################################################
+
+################ VIEW REPOSITORY SOURCES ---------------------->>>> cat /etc/apt/sources.list
+
+################ ADD NODE.JS REPOSITORY ----------------------->>>> curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
+################ INSTALL NODE.JS ------------------------------>>>> sudo apt install -y nodejs
+###############################################################
+
+
+###############################################################
+###################### SYSTEM MAINTENANCE ######################
+###############################################################
+
+################ VIEW SYSTEM LOGS ----------------------------->>>> sudo journalctl -xe
+
+################ VIEW BOOT LOGS ------------------------------->>>> journalctl -b
+
+################ REBOOT SYSTEM ------------------------------->>>> sudo reboot
+
+################ SHUTDOWN SYSTEM ------------------------------>>>> sudo shutdown now
+
+################ CHECK SYSTEM UPTIME -------------------------->>>> uptime
+
+################ CHECK MEMORY USAGE --------------------------->>>> free -h
+
+################ CHECK DISK USAGE ----------------------------->>>> df -h
+
+################ MONITOR CPU USAGE ---------------------------->>>> top
+
+################ CLEAN OLD FILES AND DEPENDENCIES ------------->>>> sudo apt autoremove -y && sudo apt clean
+###############################################################
+
+
+###############################################################
+###################### AUTOMATED UPDATES #######################
+###############################################################
+
+################ CREATE DIRECTORY ----------------------------->>>> mkdir -p ~/devops/day8
+cd ~/devops/day8
+
+################ CREATE AUTO UPDATE SCRIPT -------------------->>>> nano auto_update.sh
+
+################ SCRIPT CONTENT -------------------------------
+#!/bin/bash
+sudo apt update -y
+sudo apt upgrade -y
+echo "System updated successfully on $(date)" >> ~/devops/day8/update.log
+
+################ MAKE SCRIPT EXECUTABLE ----------------------->>>> chmod +x auto_update.sh
+
+################ RUN SCRIPT MANUALLY -------------------------->>>> ./auto_update.sh
+
+################ SCHEDULE DAILY AT 3 AM ----------------------->>>> crontab -e
+# Add the following line:
+0 3 * * * /home/ubuntu/devops/day8/auto_update.sh
+
+################ VERIFY CRON JOBS ----------------------------->>>> crontab -l
+###############################################################
+
+
+###############################################################
+###################### MAINTENANCE COMMANDS ####################
+###############################################################
+
+################ CHECK FAILED SERVICES ------------------------>>>> systemctl --failed
+
+################ CHECK RECENT BOOT LOGS ----------------------->>>> journalctl -b
+
+################ CHECK LAST REBOOTS --------------------------->>>> last reboot
+
+################ CLEAN PACKAGE CACHE -------------------------->>>> sudo apt clean
+
+################ UPDATE & UPGRADE TOGETHER ------------------->>>> sudo apt update && sudo apt upgrade -y
+###############################################################
+
+
+###############################################################
+######################## PRACTICE TASKS ########################
+###############################################################
+
+################ 1. INSTALL AND MANAGE NGINX ----------------->>>> 
+sudo apt install nginx -y
+sudo systemctl status nginx
+sudo systemctl stop nginx
+sudo systemctl start nginx
+sudo systemctl restart nginx
+sudo apt remove nginx -y
+sudo apt autoremove -y
+
+################ 2. CHECK SYSTEM DETAILS --------------------->>>> 
+lsb_release -a
+uname -r
+lscpu
+df -h
+
+################ 3. AUTOMATION TASK -------------------------->>>> 
+mkdir -p ~/devops/day8
+nano auto_update.sh
+chmod +x auto_update.sh
+./auto_update.sh
+crontab -e
+0 3 * * * /home/ubuntu/devops/day8/auto_update.sh
+###############################################################
+
+
+###############################################################
+######################## KEY TAKEAWAYS #########################
+###############################################################
+# - APT (Advanced Package Tool) is the main package manager for Ubuntu/Debian.
+# - Use 'update' before installing any package.
+# - Use 'upgrade' and 'full-upgrade' to keep your system current.
+# - 'systemctl' manages services like nginx, docker, jenkins, etc.
+# - 'journalctl' helps check service and boot logs.
+# - Automate updates with cron for better security.
+# - Always remove unused dependencies with 'autoremove'.
+# - Proper maintenance ensures server stability and reliability.
+###############################################################
